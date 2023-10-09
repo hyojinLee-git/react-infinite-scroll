@@ -1,19 +1,23 @@
 import API from "api/API";
 import { URLs } from "api/scripts";
-import { useEffect } from "react";
+import useQueryHook from "hooks/useQueryHook";
 
 function App() {
     const fetchTodo = async () => {
-        const res = await API.get(URLs.mswTest.todos);
+        const res: string[] = await API.get(URLs.mswTest.todos);
         console.log(res);
         return res;
     };
 
-    useEffect(() => {
-        fetchTodo();
-    }, []);
+    const { data } = useQueryHook(["fetch", "todo"], fetchTodo);
 
-    return <div></div>;
+    return (
+        <ul>
+            {data?.map((v) => (
+                <li key={v}>{v}</li>
+            ))}
+        </ul>
+    );
 }
 
 export default App;
